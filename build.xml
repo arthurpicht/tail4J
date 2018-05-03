@@ -1,8 +1,113 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<project name="tail4J" default="resolve.3p">
+<project name="tail4j" default="jar">
+
+    <tstamp>
+        <format property="timestamp" pattern="yyyyMMdd-HHmm"/>
+    </tstamp>
+
+    <property name="version" value="0.1-snapshot${timestamp}"/>
 
     <property name="lib.dir" value="${basedir}/lib"/>
+
+    <property name="lib-test.dir" value="${basedir}/lib-test"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="bin.dir" value="${build.dir}/bin"/>
+    <property name="bin-test.dir" value="${build.dir}/bin-test"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+
+    <property name="test-resrc.dir" value="${basedir}/test-resrc"/>
+    <property name="test-reports.dir" value="${basedir}/test-reports"/>
+
+    <property name="jar.file.name" value="${ant.project.name}-${version}.jar"/>
+
+    <property name="compiler.args" value="-encoding UTF-8 -source 8 -target 8"/>
+
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}/logback" excludes=".gitkeep"/>
+        <fileset dir="${lib.dir}/slf4j" excludes=".gitkeep"/>
+    </path>
+
+    <path id="test.classpath">
+        <fileset dir="${lib-test.dir}/junit4" excludes=".gitkeep"/>
+        <dirset dir="${bin.dir}" excludes=".gitkeep"/>
+    </path>
+
+    <path id="sourcepath">
+        <dirset dir="${basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+    <path id="sourcepath.test">
+        <dirset dir="${basedir}">
+            <include name="src-test"/>
+        </dirset>
+    </path>
+
+    <target name="clean">
+        <mkdir dir="${build.dir}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${build.dir}" includes="**/*"/>
+        </delete>
+    </target>
+
+    <target name="prepare" depends="clean">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${bin.dir}"/>
+        <mkdir dir="${bin-test.dir}"/>
+        <mkdir dir="${jar.dir}"/>
+    </target>
+
+    <target name="compile" depends="prepare">
+        <javac destdir="${bin.dir}" fork="true" includeantruntime="false">
+            <compilerarg line="${compiler.args}"/>
+            <classpath refid="compile.classpath"/>
+            <src refid="sourcepath"/>
+        </javac>
+        <javac destdir="${bin-test.dir}" fork="true" includeantruntime="false">
+            <compilerarg line="${compiler.args}"/>
+            <classpath refid="test.classpath"/>
+            <src refid="sourcepath.test"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile" description="Build to JAR">
+        <jar destfile="${jar.dir}/${jar.file.name}" basedir="${bin.dir}">
+            <fileset dir="${bin.dir}" includes="**/*.class"/>
+            <fileset dir="src" includes="**/*" excludes="**/*.java"/>
+        </jar>
+    </target>
+
+    <target name="clean.test">
+        <mkdir dir="${test-reports.dir}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${build.dir}" includes="**/*"/>
+        </delete>
+    </target>
+
+    <target name="prepare.test" depends="clean.test">
+        <mkdir dir="${test-reports.dir}"/>
+    </target>
+
+    <target name="test" depends="prepare.test, compile">
+        <junit showoutput="true">
+            <classpath refid="compile.classpath"/>
+            <classpath refid="test.classpath"/>
+
+            <classpath location="${bin-test.dir}"/>
+            <classpath location="${test-resrc.dir}"/>
+
+            <formatter type="plain"/>
+
+            <test name="de.arthurpicht.tail4j.ReverseFileReaderEmptyTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.ReverseFileReaderShortLFTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.ReverseFileReaderShortTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.ReverseFileReaderTest" todir="${test-reports.dir}"/>
+
+        </junit>
+    </target>
 
     <target name="resolve.3p" description="Pull 3rd-party libs to libdir.">
 
@@ -11,8 +116,8 @@
 
         <get src="http://search.maven.org/remotecontent?filepath=org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" dest="${lib.dir}/slf4j/slf4j-api-1.7.25.jar"/>
 
-        <get src="http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" dest="${lib.dir}/junit/hamcrest-core-1.3.jar"/>
-        <get src="http://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar" dest="${lib.dir}/junit/junit-4.12.jar"/>
+        <get src="http://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" dest="${lib-test.dir}/junit/hamcrest-core-1.3.jar"/>
+        <get src="http://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar" dest="${lib-test.dir}/junit/junit-4.12.jar"/>
 
     </target>
 

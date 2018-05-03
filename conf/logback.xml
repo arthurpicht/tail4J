@@ -10,7 +10,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>log/hedgehog.log</file>
+        <file>log/log4j.log</file>
         <encoder>
             <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
@@ -21,7 +21,7 @@
 
     <!--
     <appender name="R-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${NVKK2_HOME}/log/r-caller.r</file>
+        <file>${PROJECT_HOME}/log/r-caller.r</file>
         <param name="Append" value="false"/>
         <encoder>
             <pattern>%msg%n</pattern>
