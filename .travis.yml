@@ -2,3 +2,4 @@ language: java
 install: ant resolve.3p
 jdk:
   - oraclejdk8
+script: ant jar
