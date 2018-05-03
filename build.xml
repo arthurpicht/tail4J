@@ -51,6 +51,7 @@
         <delete includeemptydirs="true">
             <fileset dir="${build.dir}" includes="**/*"/>
         </delete>
+
     </target>
 
     <target name="prepare" depends="clean">
@@ -83,7 +84,7 @@
     <target name="clean.test">
         <mkdir dir="${test-reports.dir}"/>
         <delete includeemptydirs="true">
-            <fileset dir="${build.dir}" includes="**/*"/>
+            <fileset dir="${test-reports.dir}" includes="**/*"/>
         </delete>
     </target>
 

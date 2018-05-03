@@ -1,0 +1,8 @@
+clean
+clean.test
+compile
+jar
+prepare
+prepare.test
+resolve.3p
+test
