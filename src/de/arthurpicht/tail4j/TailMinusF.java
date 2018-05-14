@@ -9,7 +9,7 @@ import java.io.IOException;
 public class TailMinusF implements Runnable {
 
     private Tail tail;
-    private ExceptionListener exceptionListener = null;
+    private ExceptionListener exceptionListener = new DefaultExceptionListener();
 
     private long sleepInterval = 1000;
     private boolean run = true;
@@ -43,12 +43,8 @@ public class TailMinusF implements Runnable {
 
             } catch (IOException | InterruptedException e) {
 
-                Logger.error(e.getMessage());
-
-                if (this.exceptionListener != null) {
-                    this.exceptionListener.notify(this.tail.getLogFile(), e);
-                }
-
+                Logger.error("Error when processing " + this.tail.getLogFile().getAbsolutePath() + ": " + e.getMessage());
+                this.exceptionListener.notify(this.tail.getLogFile(), e);
                 this.run = false;
             }
         }

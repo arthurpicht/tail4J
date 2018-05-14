@@ -102,10 +102,10 @@
 
             <formatter type="plain"/>
 
-            <test name="de.arthurpicht.tail4j.ReverseFileReaderEmptyTest" todir="${test-reports.dir}"/>
-            <test name="de.arthurpicht.tail4j.ReverseFileReaderShortLFTest" todir="${test-reports.dir}"/>
-            <test name="de.arthurpicht.tail4j.ReverseFileReaderShortTest" todir="${test-reports.dir}"/>
-            <test name="de.arthurpicht.tail4j.ReverseFileReaderTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.modules.reverseFileReader.ReverseFileReaderEmptyTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.modules.reverseFileReader.ReverseFileReaderShortLFTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.modules.reverseFileReader.ReverseFileReaderShortTest" todir="${test-reports.dir}"/>
+            <test name="de.arthurpicht.tail4j.modules.reverseFileReader.ReverseFileReaderTest" todir="${test-reports.dir}"/>
 
         </junit>
     </target>

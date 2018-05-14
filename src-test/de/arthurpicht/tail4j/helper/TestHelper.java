@@ -1,4 +1,4 @@
-package de.arthurpicht.tail4j;
+package de.arthurpicht.tail4j.helper;
 
 import java.io.File;
 import java.io.IOException;

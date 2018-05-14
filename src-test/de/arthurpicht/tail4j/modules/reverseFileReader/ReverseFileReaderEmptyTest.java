@@ -1,5 +1,7 @@
-package de.arthurpicht.tail4j;
+package de.arthurpicht.tail4j.modules.reverseFileReader;
 
+import de.arthurpicht.tail4j.ReverseFileReader;
+import de.arthurpicht.tail4j.helper.TestHelper;
 import org.junit.Test;
 
 import java.io.File;
@@ -11,29 +13,14 @@ import static org.junit.Assert.fail;
 
 /**
  * Arthur Picht, Düsseldorf, 30.04.18.
- *
- * Test: File is shorter than number of lines to read.
- *
  */
-public class ReverseFileReaderShortTest {
+public class ReverseFileReaderEmptyTest {
 
-    private String FILE_UNIX = "test-resrc/short-file-unix.txt";
-    private String FILE_WIN = "test-resrc/short-file-win.txt";
-    private String FILE_OLDMAC = "test-resrc/short-file-oldmac.txt";
+    private String FILE_EMPTY = "test-resrc/empty-file.txt";
 
     @Test
     public void getLastLinesPointerUnix() {
-        getLastLinesPointer(FILE_UNIX);
-    }
-
-    @Test
-    public void getLastLinesPointerWin() {
-        getLastLinesPointer(FILE_WIN);
-    }
-
-    @Test
-    public void getLastLinesPointerOldMac() {
-        getLastLinesPointer(FILE_OLDMAC);
+        getLastLinesPointer(FILE_EMPTY);
     }
 
     private void getLastLinesPointer(String fileName) {
@@ -53,8 +40,7 @@ public class ReverseFileReaderShortTest {
     }
 
     private void assertLines(List<String> lines) {
-        assertEquals("Zeile 11", lines.get(0));
-        assertEquals("Zeile 12", lines.get(1));
+        assertEquals(0, lines.size());
     }
 
 }
