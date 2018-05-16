@@ -7,8 +7,20 @@ import java.io.File;
  */
 public class DefaultExceptionListener implements ExceptionListener {
 
+    private Exception exception = null;
+
+    public DefaultExceptionListener() {}
+
     @Override
-    public void notify(File file, Exception e) {
+    public void notify(Exception e) {
         // do intentionally nothing
+    }
+
+    public boolean isExceptionOccured() {
+        return this.exception != null;
+    }
+
+    public Exception getLastException() {
+        return this.exception;
     }
 }

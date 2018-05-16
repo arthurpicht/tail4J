@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- * Arthur Picht, Düsseldorf, 02.05.18.
+ * End user class for low level usage. After initializing Tail, subsequent calls to visit
+ * will process newly added lines of file.
+ *
+ * @author Arthur Picht, Düsseldorf, 02.05.18.
  */
 public class Tail {
 
@@ -16,6 +19,10 @@ public class Tail {
     private long pointer;
     private long lastFileLength;
 
+    /**
+     * @param logFile File to be processed.
+     * @throws IOException
+     */
     public Tail(File logFile) throws IOException {
 
         if (logFile == null) throw new IllegalArgumentException("Specified file (logFile) is null.");
@@ -27,6 +34,13 @@ public class Tail {
         init();
     }
 
+    /**
+     *
+     * @param logFile File to be processed.
+     * @param nrLastLines Number of lines processed on first visit.
+     * @param logstatementProcessor Implementation of <code>LogstatementProcessor</code>.
+     * @throws IOException
+     */
     public Tail(File logFile, int nrLastLines, LogstatementProcessor logstatementProcessor) throws IOException {
 
         if (logFile == null) throw new IllegalArgumentException("Specified file (logFile) is null.");
@@ -46,6 +60,11 @@ public class Tail {
         pointer = reverseFileReader.getLastLinesPointer(nrLastLines);
     }
 
+    /**
+     * Processes all newly added lines of logfile.
+     *
+     * @throws IOException
+     */
     public void visit() throws IOException {
 
         long fileLength = this.logFile.length();

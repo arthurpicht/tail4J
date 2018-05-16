@@ -1,5 +1,7 @@
 package de.arthurpicht.tail4j.helper;
 
+import de.arthurpicht.tail4j.Logger;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class LogFileCreator implements Runnable {
             this.sleep(2000);
 
             this.writeTempFile(100);
-            this.tempFile.delete();
+//            this.tempFile.delete();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,6 +50,8 @@ public class LogFileCreator implements Runnable {
 
             printWriter.println(i + " ... some content ...");
             printWriter.flush();
+
+            Logger.debug(i + " ... written.");
 
             this.sleep(sleepTime);
         }

@@ -7,6 +7,6 @@ import java.io.File;
  */
 public interface ExceptionListener {
 
-    public void notify(File file, Exception e);
+    public void notify(Exception e);
 
 }
