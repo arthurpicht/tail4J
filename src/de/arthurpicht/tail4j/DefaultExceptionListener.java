@@ -13,7 +13,7 @@ public class DefaultExceptionListener implements ExceptionListener {
 
     @Override
     public void notify(Exception e) {
-        // do intentionally nothing
+        Logger.error(e.getMessage());
     }
 
     public boolean isExceptionOccured() {

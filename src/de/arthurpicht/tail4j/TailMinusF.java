@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * Arthur Picht, Düsseldorf, 02.05.18.
  */
-public class TailMinusF implements Runnable {
+public class TailMinusF implements Runnable, TailMinusFInterface {
 
     private final Tail tail;
     private final ExceptionListener exceptionListener;
@@ -20,11 +20,6 @@ public class TailMinusF implements Runnable {
         this.tail = new Tail(logFile);
         this.exceptionListener = new DefaultExceptionListener();
     }
-
-//    public TailMinusF(File logFile, int lastLines, LogstatementProcessor logstatementProcessor, long sleepInterval) throws IOException {
-//        this.tail = new Tail(logFile, lastLines, logstatementProcessor);
-//        this.sleepInterval = sleepInterval;
-//    }
 
     public TailMinusF(File logFile, int lastLines, LogstatementProcessor logstatementProcessor, long sleepInterval, ExceptionListener exceptionListener) throws IOException {
         this.tail = new Tail(logFile, lastLines, logstatementProcessor);
@@ -42,13 +37,16 @@ public class TailMinusF implements Runnable {
 
             try {
                 this.tail.visit();
-                Thread.sleep(this.sleepInterval);
+                sleepInterruptable(this.sleepInterval);
 
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
 
-                Logger.error("Error when processing " + this.tail.getLogFile().getAbsolutePath() + ": " + e.getMessage());
+//                Logger.error("Error when processing [" + this.tail.getLogFile().getAbsolutePath() + "]: " + e.getMessage());
                 this.exceptionListener.notify(e);
-                this.run = false;
+
+                sleepInterruptable(this.sleepInterval);
+                // optional: introduce stopOnException Parameter
+//                this.run = false;
             }
         }
 
@@ -60,6 +58,7 @@ public class TailMinusF implements Runnable {
      * @return
      * @throws IllegalStateException If thread is already running.
      */
+    @Override
     public Thread start() {
 
         if (this.tailMinusFThread != null && this.tailMinusFThread.isAlive()) {
@@ -73,10 +72,12 @@ public class TailMinusF implements Runnable {
         return this.tailMinusFThread;
     }
 
+    @Override
     public boolean isRunning() {
         return this.tailMinusFThread != null && this.tailMinusFThread.isAlive();
     }
 
+    @Override
     public void stop() {
         this.run = false;
     }
@@ -88,4 +89,16 @@ public class TailMinusF implements Runnable {
     public long getSleepInterval() {
         return sleepInterval;
     }
+
+    private void sleepInterruptable(long sleepInterval) {
+
+        if (!this.run) return;
+
+        try {
+            Thread.sleep(sleepInterval);
+        } catch (InterruptedException e) {
+            this.run = false;
+        }
+    }
+
 }
