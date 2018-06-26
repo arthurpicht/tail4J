@@ -19,28 +19,9 @@
         </filter>
     </appender>
 
-    <!--
-    <appender name="R-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${PROJECT_HOME}/log/r-caller.r</file>
-        <param name="Append" value="false"/>
-        <encoder>
-            <pattern>%msg%n</pattern>
-        </encoder>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
-        </filter>
-    </appender>
-    -->
-
     <root level="debug">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
-
-    <!--
-    <logger name="RCOMMAND" level="OFF">
-        <appender-ref ref="R-FILE"/>
-    </logger>
-    -->
 
 </configuration>

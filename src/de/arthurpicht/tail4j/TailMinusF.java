@@ -8,49 +8,45 @@ import java.io.IOException;
  */
 public class TailMinusF implements Runnable, TailMinusFInterface {
 
-    private final Tail tail;
-    private final ExceptionListener exceptionListener;
+    private final TailMinusFConf tailMinusFConf;
 
-    private long sleepInterval = 1000;
+    private Tail tail;
     private boolean run = true;
 
     private Thread tailMinusFThread = null;
 
-    public TailMinusF(File logFile) throws IOException {
-        this.tail = new Tail(logFile);
-        this.exceptionListener = new DefaultExceptionListener();
-    }
-
-    public TailMinusF(File logFile, int lastLines, LogstatementProcessor logstatementProcessor, long sleepInterval, ExceptionListener exceptionListener) throws IOException {
-        this.tail = new Tail(logFile, lastLines, logstatementProcessor);
-        this.sleepInterval = sleepInterval;
-        this.exceptionListener = exceptionListener;
+    public TailMinusF(TailMinusFConf tailMinusFConf) {
+        this.tailMinusFConf = tailMinusFConf;
     }
 
 
     @Override
     public void run() {
 
-        Logger.info(TailMinusF.class.getSimpleName() + " started processing file " + this.tail.getLogFile().getAbsolutePath());
+        Logger.info(TailMinusF.class.getSimpleName() + " started processing file " + getAbsolutePath());
+
+        if (this.tailMinusFConf.isWaitForFileToBecomeAccessible()) {
+            waitForFileToBecomeAccessible();
+        }
+
+        createTailInstance();
 
         while(this.run) {
 
             try {
+
                 this.tail.visit();
-                sleepInterruptable(this.sleepInterval);
+                sleepInterruptable();
 
             } catch (IOException e) {
 
-//                Logger.error("Error when processing [" + this.tail.getLogFile().getAbsolutePath() + "]: " + e.getMessage());
-                this.exceptionListener.notify(e);
+                this.tailMinusFConf.getExceptionListener().notify(e);
+                this.run = false;
 
-                sleepInterruptable(this.sleepInterval);
-                // optional: introduce stopOnException Parameter
-//                this.run = false;
             }
         }
 
-        Logger.info(TailMinusF.class.getSimpleName() + " stopped processing file " + this.tail.getLogFile().getAbsolutePath());
+        Logger.info(TailMinusF.class.getSimpleName() + " stopped processing file " + getAbsolutePath());
     }
 
     /**
@@ -82,22 +78,62 @@ public class TailMinusF implements Runnable, TailMinusFInterface {
         this.run = false;
     }
 
-    public ExceptionListener getExceptionListener() {
-        return exceptionListener;
-    }
-
-    public long getSleepInterval() {
-        return sleepInterval;
-    }
-
-    private void sleepInterruptable(long sleepInterval) {
+    private void sleepInterruptable() {
 
         if (!this.run) return;
 
         try {
-            Thread.sleep(sleepInterval);
+            Thread.sleep(this.tailMinusFConf.getSleepInterval());
         } catch (InterruptedException e) {
             this.run = false;
+        }
+    }
+
+    private String getAbsolutePath() {
+        return this.tailMinusFConf.getFile().getAbsolutePath();
+    }
+
+    private boolean isFileAccessible() {
+        File file = this.tailMinusFConf.getFile();
+        return (file.exists() && file.isFile() && file.canRead());
+    }
+
+    private void waitForFileToBecomeAccessible() {
+        if (!this.run) return;
+
+        boolean isErrorLogged = false;
+        while (!isFileAccessible() && this.run) {
+
+            if (!isErrorLogged) {
+                Logger.info("Waiting for file to become accessible: [" + getAbsolutePath() + "].");
+                isErrorLogged = true;
+            }
+
+            sleepInterruptable();
+        }
+        Logger.debug("File [" + getAbsolutePath() + "] is accessible.");
+
+    }
+
+    private void createTailInstance() {
+
+        if (!this.run) return;
+
+        try {
+
+            this.tail = new Tail(
+                    this.tailMinusFConf.getFile(),
+                    this.tailMinusFConf.getLastLines(),
+                    this.tailMinusFConf.getLogstatementProcessor()
+            );
+
+            Logger.debug("Instance of TailMinusF successfully created.");
+
+        } catch (IOException e) {
+
+            this.tailMinusFConf.getExceptionListener().notify(e);
+            this.run = false;
+
         }
     }
 

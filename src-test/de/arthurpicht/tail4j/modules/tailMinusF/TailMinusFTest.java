@@ -3,6 +3,7 @@ package de.arthurpicht.tail4j.modules.tailMinusF;
 import de.arthurpicht.tail4j.DefaultExceptionListener;
 import de.arthurpicht.tail4j.Logger;
 import de.arthurpicht.tail4j.TailMinusF;
+import de.arthurpicht.tail4j.TailMinusFConfBuilder;
 import de.arthurpicht.tail4j.helper.LogFileCreator;
 import de.arthurpicht.tail4j.modules.tail.CounterTestLogstatementProcessor;
 import org.junit.Rule;
@@ -38,7 +39,13 @@ public class TailMinusFTest {
             DefaultExceptionListener exceptionListener = new DefaultExceptionListener();
             CounterTestLogstatementProcessor counterTestLogstatementProcessor = new CounterTestLogstatementProcessor();
 
-            TailMinusF tailMinusF = new TailMinusF(tempFile, 10, counterTestLogstatementProcessor, 1000, exceptionListener);
+            TailMinusFConfBuilder tailMinusFConfBuilder = new TailMinusFConfBuilder()
+                    .setFile(tempFile)
+                    .setLastLines(10)
+                    .setLogstatementProcessor(counterTestLogstatementProcessor)
+                    .setExceptionListener(exceptionListener);
+
+            TailMinusF tailMinusF = new TailMinusF(tailMinusFConfBuilder.build());
 
             assertFalse("TailMinusF not in excepected state (not running)", tailMinusF.isRunning());
 
