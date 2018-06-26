@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class HelloWorld {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         Tail tail = new Tail(new File("/var/log/syslog"));
 
@@ -15,11 +15,7 @@ public class HelloWorld {
 
             tail.visit();
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(1000);
         }
     }
 }

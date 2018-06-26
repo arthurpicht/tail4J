@@ -21,7 +21,7 @@ All repeated calls to *visit()* in periods of 1000 msec will add those lines, th
     
     public class HelloWorld {
     
-        public static void main(String[] args) throws IOException {
+        public static void main(String[] args) throws IOException, InterruptedException {
     
             Tail tail = new Tail(new File("/var/log/syslog"));
     
@@ -29,11 +29,7 @@ All repeated calls to *visit()* in periods of 1000 msec will add those lines, th
     
                 tail.visit();
     
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Thread.sleep(1000);
             }
         }
     }
