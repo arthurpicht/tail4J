@@ -18,7 +18,7 @@ tail4J provides two main classes: *Tail* (low-level) and *TailMinusF* (high-leve
 Initially, this one outputs the last ten lines of */var/log/syslog* to command line.
 All repeated calls to *visit()* in periods of 1000 msec will add those lines, that were created in the meantime. 
 
-```
+```java
 package de.arthurpicht.tail4j.demo;
 
 import de.arthurpicht.tail4j.Tail;
@@ -48,7 +48,7 @@ In real world applications, you will want to do some custom processing of log st
 In order to do so, implement the *LogstatementProcessor* interface and pass it to *Tail* on
 initialization.
 
-```
+```java
 package de.arthurpicht.tail4j.demo;
 
 import de.arthurpicht.tail4j.LogstatementProcessor;
@@ -85,7 +85,7 @@ Have a look on *TailMinusFConfBuilder* for full configuration capabilities.
 
 ### Basic usage of TailMinusF
 
-```
+```java
 package de.arthurpicht.tail4j.demo;
 
 import de.arthurpicht.tail4j.TailMinusF;
@@ -117,7 +117,7 @@ public class Demo1 {
 
 Just as shown for *Tail*, here again a custom *LogstatementProcessor* can be implemented. 
 
-```
+```java
 package de.arthurpicht.tail4j.demo;
 
 import de.arthurpicht.tail4j.LogstatementProcessor;
@@ -157,7 +157,7 @@ Instead a *ExceptionListener* is notified in case an exception occurs.
 By default, a *DefaultExceptionListener* just caches the last exception for a later processing.
 
 
-```
+```java
 package de.arthurpicht.tail4j.demo;
 
 import de.arthurpicht.tail4j.DefaultExceptionListener;
@@ -201,7 +201,7 @@ public class Demo3 {
 
 As shown here, an instance of *ExceptionListener* interface can be implemented, in order to provide a custom exception handling.
 
-```
+```java
 package de.arthurpicht.tail4j.demo;
 
 import de.arthurpicht.tail4j.ExceptionListener;
