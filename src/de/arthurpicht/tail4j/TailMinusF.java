@@ -78,6 +78,10 @@ public class TailMinusF implements Runnable, TailMinusFInterface {
         this.run = false;
     }
 
+    public TailMinusFConf getTailMinusFConf() {
+        return this.tailMinusFConf;
+    }
+
     private void sleepInterruptable() {
 
         if (!this.run) return;

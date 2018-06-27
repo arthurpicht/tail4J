@@ -16,7 +16,7 @@ public class DefaultExceptionListener implements ExceptionListener {
         Logger.error(e.getMessage());
     }
 
-    public boolean isExceptionOccured() {
+    public boolean isExceptionOccurred() {
         return this.exception != null;
     }
 

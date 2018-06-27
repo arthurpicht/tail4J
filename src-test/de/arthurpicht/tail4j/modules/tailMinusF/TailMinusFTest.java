@@ -54,13 +54,13 @@ public class TailMinusFTest {
 
             assertTrue("TailMinusF not in excepected state (running)", tailMinusF.isRunning());
 
-            while(logFileCreatorThread.isAlive() && counterTestLogstatementProcessor.hasSuccess() && !exceptionListener.isExceptionOccured()) {
+            while(logFileCreatorThread.isAlive() && counterTestLogstatementProcessor.hasSuccess() && !exceptionListener.isExceptionOccurred()) {
                 Thread.sleep(500);
             }
 
             Thread.sleep(1000);
 
-            if (exceptionListener.isExceptionOccured()) {
+            if (exceptionListener.isExceptionOccurred()) {
                 fail("Exception occured when processing logfile: " + exceptionListener.getLastException().getMessage());
             }
 
