@@ -22,6 +22,10 @@ public class TailMinusFTest {
 
     private static final String LOGFILE_NAME = "tail4Jtemp.log";
 
+    static {
+      //  System.setProperty(Logger.LOGGER_SYS_PROP, "sdtout");
+    }
+
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
@@ -61,7 +65,7 @@ public class TailMinusFTest {
             Thread.sleep(1000);
 
             if (exceptionListener.isExceptionOccurred()) {
-                fail("Exception occured when processing logfile: " + exceptionListener.getLastException().getMessage());
+                fail("Exception occurred when processing logfile: " + exceptionListener.getLastException().getMessage());
             }
 
             if (!counterTestLogstatementProcessor.hasSuccess()) {
@@ -73,7 +77,7 @@ public class TailMinusFTest {
             assertTrue("TailMinusF not in excepected state (running)", tailMinusF.isRunning());
             tailMinusF.stop();
             Thread.sleep(1500);
-            assertFalse("TailMinusF not in excepected state (not running)", tailMinusF.isRunning());
+            assertFalse("TailMinusF not SLF4Jin excepected state (not running)", tailMinusF.isRunning());
 
         } catch (IOException | InterruptedException e) {
             Logger.info(e.getMessage());

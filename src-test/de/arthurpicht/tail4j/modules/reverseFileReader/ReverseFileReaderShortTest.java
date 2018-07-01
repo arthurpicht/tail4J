@@ -1,5 +1,6 @@
 package de.arthurpicht.tail4j.modules.reverseFileReader;
 
+import de.arthurpicht.tail4j.Logger;
 import de.arthurpicht.tail4j.ReverseFileReader;
 import de.arthurpicht.tail4j.helper.TestHelper;
 import org.junit.Test;
@@ -22,6 +23,10 @@ public class ReverseFileReaderShortTest {
     private String FILE_UNIX = "test-resrc/short-file-unix.txt";
     private String FILE_WIN = "test-resrc/short-file-win.txt";
     private String FILE_OLDMAC = "test-resrc/short-file-oldmac.txt";
+
+    static {
+        System.setProperty(Logger.LOGGER_SYS_PROP, "slf4j");
+    }
 
     @Test
     public void getLastLinesPointerUnix() {

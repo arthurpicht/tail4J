@@ -217,7 +217,7 @@ public class Demo4 {
 
         LogstatementProcessor logstatementProcessor = logStatement -> System.out.println("Here I could do some processing of \"" + logStatement + "\" ...");
 
-        ExceptionListener exceptionListener = e -> System.out.println("Exception occured: " + e.getMessage());
+        ExceptionListener exceptionListener = e -> System.out.println("Exception occurred: " + e.getMessage());
 
         TailMinusFConfBuilder tailMinusFConfBuilder
                 = new TailMinusFConfBuilder()
@@ -236,6 +236,21 @@ public class Demo4 {
     }
 }
 ```
+
+## Logging
+
+tail4j itself produces some log statements that can be helpful in tracing and debugging conditions.
+
+However, logging is disabled and no runtime dependency must be fulfilled by default.
+
+For turning on logging, system property *de.arthurpicht.tail4j.logging* needs to be configured.
+Set it to *slf4j* and tail4J will pass all generated log statements to SLF4J.
+When doing so make sure that SLF4J and the respective underlying logging framework is on classpath and properly configured.
+
+Setting system property to *stdout* will simply write log statements to console without any further
+dependency on a particular logging framework.
+
+All other values are ignored and thus tail4j will behave in default mode.
 
 ## License
 
